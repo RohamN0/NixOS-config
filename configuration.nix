@@ -15,6 +15,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.initrd.luks.devices."luks-5eebb1ba-c549-440b-a237-738265fcd076".device = "/dev/disk/by-uuid/5eebb1ba-c549-440b-a237-738265fcd076";
+
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -76,6 +77,7 @@
     ];
   };
 
+  # Install firefox.
   programs.firefox.enable = true;
 
   # Allow unfree packages
