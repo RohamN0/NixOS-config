@@ -24,8 +24,8 @@
 
         devShells = {
             ${system} = {
-                python = (import /home/roham/.dotfiles/python.nix { inherit pkgs; });
-                c = (import /home/roham/.dotfiles/c++.nix { inherit pkgs; });
+                python = (import /home/roham/.dotfiles/dev/python.nix { inherit pkgs; });
+                c = (import /home/roham/.dotfiles/dev/c++.nix { inherit pkgs; });
             };
         };
         
