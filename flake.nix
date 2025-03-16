@@ -4,7 +4,7 @@
         nixpkgs = {
             url = "github:NixOS/nixpkgs/nixos-unstable";
         };
-        home-manager.url = "github:NixOS/nixpkgs/nixps-unstable";
+        home-manager.url = "github:NixOS/nixpkgs/nixos-unstable";
         home-manager.inputs.nixpkgs.follows = "nixpkgs";
     };
 
