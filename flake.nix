@@ -13,6 +13,7 @@
         lib = nixpkgs.lib;
         system = "x86_64-linux";
         pkgs = nixpkgs.legacyPackages.${system};
+
     in {
         nixosConfigurations = {
             roham = lib.nixosSystem {
@@ -21,7 +22,12 @@
             };
         };
 
-        devShells.${system}.python = (import /home/roham/Tempelates/python.nix {inherit pkgs; });
+        devShells = {
+            ${system} = {
+                python = (import /home/roham/.dotfiles/python.nix { inherit pkgs; });
+                c = (import /home/roham/.dotfiles/c++.nix { inherit pkgs; });
+            };
+        };
         
         # Homa Manager
 #       home-managerConfigurations = {
