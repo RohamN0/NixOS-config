@@ -1,4 +1,5 @@
 {
+#test
     inputs = {
         nixpkgs = {
             url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -19,13 +20,15 @@
                 modules = [ ./configuration.nix ];
             };
         };
+
+        devShells.${system}.python = (import /home/roham/Tempelates/python.nix {inherit pkgs; });
         
         # Homa Manager
-        home-managerConfigurations = {
-            roham = home-manager.lib.homeManagerConfiguration {
-                inherit pkgs;
-                modules = [ ./home.nix ];
-            };
-        };
+#       home-managerConfigurations = {
+#           roham = home-manager.lib.homeManagerConfiguration {
+#               inherit pkgs;
+#               modules = [ ./home.nix ];
+#           };
+#       };
     };
 }
