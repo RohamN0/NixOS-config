@@ -1,10 +1,9 @@
 {
-#test
     inputs = {
         nixpkgs = {
             url = "github:NixOS/nixpkgs/nixos-unstable";
         };
-        home-manager.url = "github:NixOS/nixpkgs/nixos-unstable";
+        home-manager.url = "github:nix-community/home-manager";
         home-manager.inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -25,16 +24,20 @@
         devShells = {
             ${system} = {
                 python = (import /home/roham/.dotfiles/dev/python.nix { inherit pkgs; });
-                c = (import /home/roham/.dotfiles/dev/c++.nix { inherit pkgs; });
+                cpp = (import /home/roham/.dotfiles/dev/c++.nix { inherit pkgs; });
             };
         };
         
         # Homa Manager
-#       home-managerConfigurations = {
-#           roham = home-manager.lib.homeManagerConfiguration {
-#               inherit pkgs;
-#               modules = [ ./home.nix ];
-#           };
-#       };
+        homeConfigurations."roham" = home-manager.lib.homeManagerConfiguration {
+		    inherit pkgs;
+
+		    # Specify your home configuration modules here, for example,
+		    # the path to your home.nix.
+		    modules = [ ./home.nix ];
+
+		    # Optionally use extraSpecialArgs
+		    # to pass through arguments to home.nix
+		  };
     };
 }
