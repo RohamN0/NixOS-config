@@ -1,6 +1,12 @@
 { config, pkgs, ... }:
 
 {
+  imports = 
+    [
+        /home/roham/.dotfiles/apps/tmux.nix
+        /home/roham/.dotfiles/apps/zsh.nix
+        /home/roham/.dotfiles/apps/ghostty.nix
+    ];
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "roham";
@@ -31,9 +37,19 @@
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
     # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
+    (pkgs.writeShellScriptBin "my-hello" ''
+      echo "Hello, ${config.home.username}!"
+    '')
+
+    (pkgs.writeShellScriptBin "dev-python" ''
+        cd /home/roham/.dotfiles
+        nix develop --impure .\#python
+    '')
+
+    (pkgs.writeShellScriptBin "dev-cpp" ''
+        cd /home/roham/.dotfiles
+        nix develop --impure .\#cpp
+    '')
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -68,9 +84,11 @@
   #  /etc/profiles/per-user/roham/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    EDITOR = "nvim";
   };
-
+ 
+  programs.zsh.enable = true;
+  
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }

@@ -80,6 +80,11 @@
   # Install firefox.
   programs.firefox.enable = true;
 
+  # zsh
+  environment.shells = with pkgs; [ zsh ];
+  users.defaultUserShell = pkgs.zsh;
+  programs.zsh.enable = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -97,6 +102,13 @@
      ghostty
      kitty
      tree
+     zsh
+     zimfw
+     lua-language-server
+     tmuxPlugins.cpu
+     tmuxPlugins.better-mouse-mode
+     zplug
+     python313
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

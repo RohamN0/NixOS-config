@@ -20,7 +20,7 @@
                 modules = [ ./configuration.nix ];
             };
         };
-
+        
         devShells = {
             ${system} = {
                 python = (import /home/roham/.dotfiles/dev/python.nix { inherit pkgs; });
