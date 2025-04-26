@@ -5,9 +5,14 @@
         };
         home-manager.url = "github:nix-community/home-manager";
         home-manager.inputs.nixpkgs.follows = "nixpkgs";
+        hyprland.url = "github:hyprwm/Hyprland";
+        hyprland-plugins = {
+            url = "github:hyprwm/hyprland-plugins";
+            inputs.hyprland.follows = "hyprland";
+        };
     };
 
-    outputs = { self, nixpkgs, home-manager, ... }:
+    outputs = inputs@{ self, nixpkgs, home-manager, ... }:
     let 
         lib = nixpkgs.lib;
         system = "x86_64-linux";
@@ -17,6 +22,9 @@
         nixosConfigurations = {
             roham = lib.nixosSystem {
                 inherit system;
+                specialArgs = {
+                    inherit inputs;
+                };
                 modules = [ ./configuration.nix ];
             };
         };
@@ -31,6 +39,9 @@
         # Homa Manager
         homeConfigurations."roham" = home-manager.lib.homeManagerConfiguration {
 		    inherit pkgs;
+            extraSpecialArgs = {
+                inherit inputs;
+            };
 
 		    # Specify your home configuration modules here, for example,
 		    # the path to your home.nix.

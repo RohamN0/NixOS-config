@@ -16,7 +16,6 @@
         '';
         shellAliases = {
             ll = "ls -l";
-            update = "sudo nixos-rebuild switch --flake .#roham";
             close = "kill -9 $PPID && sed -i 's/status=.*/status='default'/' /home/roham/.dotfiles/status.sh && exit";
         };
 

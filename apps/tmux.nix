@@ -10,6 +10,7 @@
     escapeTime = 0;
     # Force tmux to use /tmp for sockets (WSL2 compat)
     secureSocket = false;
+    shell = "${pkgs.zsh}/bin/zsh";
 
     plugins = with pkgs; [
       tmuxPlugins.better-mouse-mode
@@ -30,6 +31,8 @@
 
       # Mouse works as expected
       set-option -g mouse on
+
+      run-shell zsh
     '';
   };
 
@@ -43,7 +46,7 @@
         echo "Launching tmux for ''$PRJ"
         set -x
         cd "''$PRJ" && \
-          exec tmux -S "''$PRJ".tmux attach
+        exec tmux -S "''$PRJ".tmux attach
       '';
     })
   ];

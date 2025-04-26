@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs,  ... }:
 
 {
   imports = 
@@ -6,6 +6,8 @@
         /home/roham/.dotfiles/apps/tmux.nix
         /home/roham/.dotfiles/apps/zsh.nix
         /home/roham/.dotfiles/apps/ghostty.nix
+        /home/roham/.dotfiles/apps/texlive.nix
+        /home/roham/.dotfiles/apps/hyperland.nix
     ];
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -50,6 +52,17 @@
         cd /home/roham/.dotfiles
         nix develop --impure .\#cpp
     '')
+
+   (pkgs.writeShellScriptBin "home-manager-update" ''
+        cd /home/roham/.dotfiles
+        home-manager switch --impure --flake .
+   '')
+
+   (pkgs.writeShellScriptBin "update" ''
+        cd /home/roham/.dotfiles
+        nixos-rebuild switch --flake .#roham --use-remote-sudo
+   '')
+
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -84,7 +97,7 @@
   #  /etc/profiles/per-user/roham/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    EDITOR = "nvim";
+    EDITOR = "neovim";
   };
  
   programs.zsh.enable = true;

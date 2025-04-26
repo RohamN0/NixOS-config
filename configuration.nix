@@ -11,8 +11,27 @@
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.grub = {
+      enable = true;
+      efiSupport = true;
+      devices = [ "nodev" ];
+      copyKernels = true;
+      # efiInstallAsRemovable = true;
+      fsIdentifier = "label";
+      splashMode = "stretch";
+      extraEntries = ''
+        menuentry "Reboot" {
+            reboot
+        }
+
+        menuentry "PowerOff" {
+            halt
+        }
+      '';
+  };
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
 
   boot.initrd.luks.devices."luks-5eebb1ba-c549-440b-a237-738265fcd076".device = "/dev/disk/by-uuid/5eebb1ba-c549-440b-a237-738265fcd076";
 
@@ -36,8 +55,8 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  # services.xserver.displayManager.gdm.enable = true;
+  # services.xserver.desktopManager.gnome.enable = true;
 
  # configure keymap in x11
  #  services.xserver.xkb = {
@@ -109,6 +128,8 @@
      tmuxPlugins.better-mouse-mode
      zplug
      python313
+     doas
+     doas-sudo-shim
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -120,6 +141,16 @@
   # };
 
   # List services that you want to enable:
+
+  # enable doas
+  security.doas.enable = true;
+  security.sudo.enable = false;
+  security.doas.extraRules = [{
+    users = ["roham"];
+    keepEnv = true;
+    persist = true;
+  }];
+  security.doas.extraConfig = "permit persist keepenv roham as root";
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
