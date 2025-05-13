@@ -46,7 +46,7 @@
       save = false;
   };
 
-  # Adding desktop env for hyprland
+  # Adding desktop env for hyprland ly
   environment.etc."xdg/wayland-sessions/hyprland.desktop".text = ''
     [Desktop Entry]
     Name=Hyprland
