@@ -4,7 +4,7 @@ pkgs.mkShell
     nativeBuildInputs = with pkgs; [
         basedpyright
         stdenv
-        nodejs_23
+        # nodejs_23
         python313Full
         (pkgs.python313.withPackages(pypkgs: with pypkgs; [
             pip

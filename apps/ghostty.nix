@@ -5,9 +5,8 @@
         enable = true;
         enableZshIntegration = true;
         settings = { 
-            title = "Roham";
-            font-size = 16;
-	        font-family = "Iosevka Nerd Font";
+            window-decoration = "server";
+            font-size = 10;
 	        background = "1C2021";
 	        theme = "GruvboxDarkHard";
 	        window-colorspace = "display-p3";

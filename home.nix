@@ -1,13 +1,13 @@
-{ config, pkgs, inputs,  ... }:
+{ config, pkgs, inputs, hyprland,  ... }:
 
 {
   imports = 
     [
+        /home/roham/.dotfiles/apps/hyprland/hyprland.nix
         /home/roham/.dotfiles/apps/tmux.nix
         /home/roham/.dotfiles/apps/zsh.nix
         /home/roham/.dotfiles/apps/ghostty.nix
         /home/roham/.dotfiles/apps/texlive.nix
-        /home/roham/.dotfiles/apps/hyperland.nix
     ];
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -25,10 +25,14 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    pkgs.hello
+  home.packages = with pkgs; [
+    # Making hyprland avilable in /usr/bin
+    hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland
+    
+    jetbrains-mono
+    hyprpaper
+    rofi-wayland
+    pavucontrol
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -39,13 +43,11 @@
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
     # # environment:
-    (pkgs.writeShellScriptBin "my-hello" ''
-      echo "Hello, ${config.home.username}!"
-    '')
-
     (pkgs.writeShellScriptBin "dev-python" ''
+        path=$PWD
         cd /home/roham/.dotfiles
         nix develop --impure .\#python
+        cd $path
     '')
 
     (pkgs.writeShellScriptBin "dev-cpp" ''
@@ -54,6 +56,7 @@
     '')
 
    (pkgs.writeShellScriptBin "home-manager-update" ''
+        doas rm -rf ~/.config/hypr
         cd /home/roham/.dotfiles
         home-manager switch --impure --flake .
    '')
@@ -100,8 +103,6 @@
     EDITOR = "neovim";
   };
  
-  programs.zsh.enable = true;
-  
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }

@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   imports =
@@ -11,36 +11,18 @@
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = false;
-  boot.loader.grub = {
-      enable = true;
-      efiSupport = true;
-      devices = [ "nodev" ];
-      copyKernels = true;
-      # efiInstallAsRemovable = true;
-      fsIdentifier = "label";
-      splashMode = "stretch";
-      extraEntries = ''
-        menuentry "Reboot" {
-            reboot
-        }
-
-        menuentry "PowerOff" {
-            halt
-        }
-      '';
-  };
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader.efi.efiSysMountPoint = "/boot/EFI";
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.device = "nodev";
+  boot.loader.grub.copyKernels = true;
+  boot.loader.grub.useOSProber = true;
 
   boot.initrd.luks.devices."luks-5eebb1ba-c549-440b-a237-738265fcd076".device = "/dev/disk/by-uuid/5eebb1ba-c549-440b-a237-738265fcd076";
 
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  networking.hostName = "roham-thinkpad"; # Define your hostname.
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -51,18 +33,26 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  # Disable the X11 windowing system.
+  services.xserver.enable = false;
+  services.xserver.displayManager.gdm.enable = false;
+  services.xserver.desktopManager.gnome.enable = false;
 
-  # Enable the GNOME Desktop Environment.
-  # services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.desktopManager.gnome.enable = true;
+  # Enable Ly
+  services.displayManager.ly.enable = true;
+  services.displayManager.ly.settings = {
+      xinit = false;
+      load = false;
+      save = false;
+  };
 
- # configure keymap in x11
- #  services.xserver.xkb = {
- #    layout = "us";
- #    variant = "";
- #  };
+  # Adding desktop env for hyprland
+  environment.etc."xdg/wayland-sessions/hyprland.desktop".text = ''
+    [Desktop Entry]
+    Name=Hyprland
+    Exec=Hyprland
+    Type=Application
+  '';
 
   # enable cups to print documents.
   services.printing.enable = true;
@@ -76,7 +66,7 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    jack.enable = true;
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
@@ -130,6 +120,9 @@
      python313
      doas
      doas-sudo-shim
+     wayland
+     xdg-desktop-portal
+     xorg.xauth
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -140,8 +133,6 @@
   #   enableSSHSupport = true;
   # };
 
-  # List services that you want to enable:
-
   # enable doas
   security.doas.enable = true;
   security.sudo.enable = false;
@@ -151,6 +142,12 @@
     persist = true;
   }];
   security.doas.extraConfig = "permit persist keepenv roham as root";
+
+  # Enable Cachix
+  nix.settings = {
+    substituters = ["https://hyprland.cachix.org"];
+    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
